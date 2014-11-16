@@ -10,14 +10,14 @@ var evnts = {
 };
 
 cornfed(worker, evnts);
-},{"../index.js":3,"./worker.js":2,"webworkify":5}],2:[function(require,module,exports){
+},{"../index.js":3,"./worker.js":2,"webworkify":4}],2:[function(require,module,exports){
 module.exports = function worker(self){
 	self.addEventListener('message',function(msg){
 		console.log(msg.data)
 	})
 }
 },{}],3:[function(require,module,exports){
-var nodestring = require('./lib/node-string.js');
+
 module.exports = function cornfed(worker, events) {
 	// ops :: { eventName: report_schema }
 	var _post, schema;
@@ -26,7 +26,7 @@ module.exports = function cornfed(worker, events) {
 			schema = events[evnt]; // in main thread and bring whole page down
 			_post = function _post(event) {
 				try{
-					var prop, e = {};
+					var prop, e = {}, evnt = evnt;
 					schema.forEach(function(prop){
 						var val = event[prop];
 						if (val && val.nodeType){
@@ -40,6 +40,7 @@ module.exports = function cornfed(worker, events) {
 						e[prop] = val;
 					})
 					e['timestampt'] = new Date().getTime();
+					e['type'] = event.type;
 					worker.postMessage(e)
 				} catch(e){
 					console.log(e)
@@ -52,16 +53,7 @@ module.exports = function cornfed(worker, events) {
 		
 	})
 }
-},{"./lib/node-string.js":4}],4:[function(require,module,exports){
-module.exports = function node_string(node){
-	return {
-		'tag': node.tagName,
-		'class': node.classList.toString(),
-		'id': node.id,
-		'value': node.nodeValue
-	}
-}
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var bundleFn = arguments[3];
 var sources = arguments[4];
 var cache = arguments[5];

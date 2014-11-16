@@ -7,7 +7,7 @@ module.exports = function cornfed(worker, events) {
 			schema = events[evnt]; // in main thread and bring whole page down
 			_post = function _post(event) {
 				try{
-					var prop, e = {};
+					var prop, e = {}, evnt = evnt;
 					schema.forEach(function(prop){
 						var val = event[prop];
 						if (val && val.nodeType){
@@ -21,6 +21,7 @@ module.exports = function cornfed(worker, events) {
 						e[prop] = val;
 					})
 					e['timestampt'] = new Date().getTime();
+					e['type'] = event.type;
 					worker.postMessage(e)
 				} catch(e){
 					console.log(e)
