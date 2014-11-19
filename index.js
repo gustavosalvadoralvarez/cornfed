@@ -17,12 +17,7 @@ module.exports = function cornfed(worker, events) {
 				while (--props){
 					val = event[prop];
 					if (val && val.nodeType){
-						val = {
-							'tag': val.tagName,
-							'class': val.classList.toString(),
-							'id': val.id,
-							'value': val.nodeValue
-						}
+						val = val.outerHTML;
 					}
 					e[prop] = val;
 				}

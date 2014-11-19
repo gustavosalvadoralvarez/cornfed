@@ -1,6 +1,6 @@
 {
   "name": "cornfed",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "freestyle page analytics",
   "main": "index.js",
   "scripts": {
